@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 
+import { OPERATOR_PRESETS, setActiveOperator } from './api/client'
 import Overview from './views/Overview'
 import IndicatorView from './views/indicator'
 import DatasourceView from './views/datasource'
@@ -22,7 +23,9 @@ import LogView from './views/log'
 const navItems = [{ label: "运营概览", path: "/" }, { label: "指标口径管理", path: "/indicator" }, { label: "分析数据源", path: "/datasource" }, { label: "聚合查询配置", path: "/query" }, { label: "分析实验管理", path: "/experiment" }, { label: "分析数据集", path: "/dataset" }, { label: "可视化图表配置", path: "/chart" }, { label: "分析报告管理", path: "/report" }, { label: "数据服务发布", path: "/service" }, { label: "数据看板", path: "/dashboard" }, { label: "分析维度管理", path: "/dimension" }, { label: "全局筛选器", path: "/filter" }, { label: "定时分析任务", path: "/schedule" }, { label: "数据导出配置", path: "/export" }, { label: "查询缓存管理", path: "/cache" }, { label: "分析模型管理", path: "/model" }, { label: "分析操作日志", path: "/log" }]
 
 export default function App() {
-  const [operator] = useState('值班管理员')
+  const [operatorKey, setOperatorKey] = useState(OPERATOR_PRESETS[0].key)
+  const activeOperator = OPERATOR_PRESETS.find((preset) => preset.key === operatorKey) ?? OPERATOR_PRESETS[0]
+  setActiveOperator(activeOperator)
 
   return (
     <div className="app-shell">
@@ -39,7 +42,20 @@ export default function App() {
       <main className="app-main">
         <header className="app-head">
           <span className="head-desc">面向企业数据分析师与数据产品经理的一站式数据分析工作台。提供指标口径管理、聚合查询、分析实验设计、数据服务发布与应用集成的完整链路。</span>
-          <span className="head-user">当前值班：{operator}</span>
+          <span className="head-user">
+            当前值班：
+            <select
+              value={operatorKey}
+              onChange={(event) => setOperatorKey(event.target.value)}
+              aria-label="切换操作人"
+            >
+              {OPERATOR_PRESETS.map((preset) => (
+                <option key={preset.key} value={preset.key}>
+                  {preset.name}（{preset.team}）
+                </option>
+              ))}
+            </select>
+          </span>
         </header>
         <Routes>
           <Route path="/" element={<Overview />} />

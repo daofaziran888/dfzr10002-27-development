@@ -24,20 +24,7 @@ const statuses = [
   "已发布",
   "已停用"
 ]
-const stats = [
-  {
-    "label": "数据服务总数",
-    "value": 0
-  },
-  {
-    "label": "已发布服务",
-    "value": 0
-  },
-  {
-    "label": "待审批服务",
-    "value": 0
-  }
-]
+const statLabels = ["数据服务总数", "已发布服务", "待刷新服务"]
 
 type Row = Record<string, string | number | null>
 
@@ -102,12 +89,18 @@ export default function ServiceView() {
       </header>
 
       <div className="stat-row">
-        {stats.map((item) => (
-          <article key={item.label} className="stat-card">
-            <span className="stat-label">{item.label}</span>
-            <strong className="stat-value">{item.value}</strong>
-          </article>
-        ))}
+        <article className="stat-card">
+          <span className="stat-label">{statLabels[0]}</span>
+          <strong className="stat-value">{total}</strong>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">{statLabels[1]}</span>
+          <strong className="stat-value">{rows.filter((row) => row.status === '已发布').length}</strong>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">{statLabels[2]}</span>
+          <strong className="stat-value">{rows.filter((row) => row['待刷新']).length}</strong>
+        </article>
       </div>
 
       <form className="filter-bar" onSubmit={(event) => { event.preventDefault(); void reload() }}>
@@ -129,6 +122,7 @@ export default function ServiceView() {
         <thead>
           <tr>
             {columns.map((column) => <th key={column}>{column}</th>)}
+            <th>待刷新</th>
             <th>可执行动作</th>
           </tr>
         </thead>
@@ -136,6 +130,11 @@ export default function ServiceView() {
           {rows.map((row) => (
             <tr key={String(row.id)}>
               {columns.map((column) => <td key={column}>{row[column] ?? '—'}</td>)}
+              <td>
+                {row['待刷新']
+                  ? <span className="status-badge status-warn">待刷新{row['刷新来源'] ? `·${row['刷新来源']}` : ''}</span>
+                  : <span className="status-badge status-muted">—</span>}
+              </td>
               <td className="row-actions">
                 {actions.map((action) => (
                   <button key={action} className="link" type="button" onClick={() => void runAction(action, row)}>
@@ -147,7 +146,7 @@ export default function ServiceView() {
           ))}
           {rows.length === 0 && (
             <tr>
-              <td className="empty-state" colSpan={columns.length + 1}>暂无数据服务发布数据，可先登记数据服务</td>
+              <td className="empty-state" colSpan={columns.length + 2}>暂无数据服务发布数据，可先登记数据服务</td>
             </tr>
           )}
         </tbody>

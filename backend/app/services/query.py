@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.services import cache_graph
 from app.store import store
 
 MODULE = "query"
@@ -21,6 +22,8 @@ class QueryService:
         page: int = 1,
         size: int = 20,
     ) -> tuple[list[dict[str, Any]], int]:
+        # 查询模板可能被缓存规则当作上游依赖引用，列表前统一回算待刷新标记。
+        cache_graph.recompute_reference_flags()
         rows = store.rows(MODULE)
         if keyword:
             rows = [row for row in rows if keyword in str(row.get("模板编号", ""))]
@@ -56,6 +59,7 @@ class QueryService:
         if target not in STATUS_ORDER:
             return None, f"目标状态「{target}」不在允许的状态序列里"
         entry["status"] = target
-        entry["pending"] = target != STATUS_ORDER[-1]
         entry["abnormal"] = action in NEGATIVE_ACTIONS
+        cache_graph.recompute_reference_flags()
+        entry["pending"] = bool(entry.get("待刷新")) or target == STATUS_ORDER[0]
         return entry, f"查询模板已{action}"

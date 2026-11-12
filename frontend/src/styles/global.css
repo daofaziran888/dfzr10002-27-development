@@ -33,3 +33,31 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.notice-text { color: #067647; }
+.banner { border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; }
+.banner.danger { background: #fef3f2; border: 1px solid #fecdca; color: #b42318; }
+.team-chip { font-size: 12px; color: var(--muted); align-self: center; }
+.status-badge { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 12px; margin-right: 4px; }
+.status-badge.status-warn { background: #fef0c7; color: #93370d; }
+.status-badge.status-danger { background: #fef3f2; color: #b42318; }
+.status-badge.status-ok { background: #d1fadf; color: #05603a; }
+.status-badge.status-muted { background: #f1f5f9; color: var(--muted); }
+.row-selected { background: #eff6ff; }
+.data-table tbody tr { cursor: pointer; }
+.link:disabled { color: #cbd5e1; cursor: not-allowed; }
+.link.danger { color: #b42318; }
+.detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.panel h3 { font-size: 14px; margin: 0 0 10px; }
+.panel-hint { color: var(--muted); font-size: 12px; margin: 6px 0; }
+.detail-list { display: grid; grid-template-columns: 160px 1fr; gap: 6px 10px; font-size: 13px; margin: 0 0 10px; }
+.detail-list dt { color: var(--muted); }
+.detail-list dd { margin: 0; }
+.field-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin-bottom: 10px; }
+.field-row select { padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; }
+.dependency-editor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dep-column strong { font-size: 13px; }
+.dep-list { list-style: none; margin: 6px 0; padding: 0; font-size: 12px; }
+.dep-list li { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+.mini-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+.mini-table th, .mini-table td { border: 1px solid var(--border); padding: 5px 7px; text-align: left; }

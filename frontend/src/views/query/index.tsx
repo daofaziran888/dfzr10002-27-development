@@ -129,6 +129,7 @@ export default function QueryView() {
         <thead>
           <tr>
             {columns.map((column) => <th key={column}>{column}</th>)}
+            <th>待刷新</th>
             <th>可执行动作</th>
           </tr>
         </thead>
@@ -136,6 +137,11 @@ export default function QueryView() {
           {rows.map((row) => (
             <tr key={String(row.id)}>
               {columns.map((column) => <td key={column}>{row[column] ?? '—'}</td>)}
+              <td>
+                {row['待刷新']
+                  ? <span className="status-badge status-warn">待刷新{row['刷新来源'] ? `·${row['刷新来源']}` : ''}</span>
+                  : <span className="status-badge status-muted">—</span>}
+              </td>
               <td className="row-actions">
                 {actions.map((action) => (
                   <button key={action} className="link" type="button" onClick={() => void runAction(action, row)}>
@@ -147,7 +153,7 @@ export default function QueryView() {
           ))}
           {rows.length === 0 && (
             <tr>
-              <td className="empty-state" colSpan={columns.length + 1}>暂无聚合查询配置数据，可先登记查询模板</td>
+              <td className="empty-state" colSpan={columns.length + 2}>暂无聚合查询配置数据，可先登记查询模板</td>
             </tr>
           )}
         </tbody>
